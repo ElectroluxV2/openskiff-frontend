@@ -1,3 +1,6 @@
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+
 export interface Club {
   clubId: number;
   shortName: string;
@@ -79,4 +82,28 @@ export interface StartingList {
 export interface YearCategory {
   category: string;
   youngerThan: number;
+}
+
+
+export class Page {
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  activeSort: string;
+  directionSort: string;
+
+  constructor(paginator: MatPaginator, sort: MatSort) {
+    this.size = paginator.pageSize;
+    this.totalElements = 0;
+    this.totalPages = 0;
+    this.number = paginator.pageIndex;
+    this.activeSort = sort.active;
+    this.directionSort = sort.direction;
+  }
+}
+
+export interface PagedResponse<T> {
+  page: Page;
+  items: T[];
 }

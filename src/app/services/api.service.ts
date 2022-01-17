@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Club } from "./api.interface";
-import { firstValueFrom } from "rxjs";
+import { Club, Page, PagedResponse } from "./api.interface";
+import { firstValueFrom, Observable } from "rxjs";
 
 const BASE = 'http://localhost:8080';
 
@@ -11,8 +11,8 @@ const BASE = 'http://localhost:8080';
 export class ApiService {
   constructor(private http: HttpClient) { }
 
-  public async getClubs(): Promise<Club[]> {
-    return await firstValueFrom(this.http.get<Club[]>(`${BASE}/clubs/`));
+  public getClubs(page: Page): Observable<PagedResponse<Club>> {
+    return this.http.post<PagedResponse<Club>>(`${BASE}/clubs/`, page);
   }
 
   async saveClub(club: Club) {
