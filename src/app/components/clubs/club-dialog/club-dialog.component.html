@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Add new Club</h2>
+<mat-dialog-content class="mat-typography">
+
+  <p>Fill below</p>
+
+  <form #form="ngForm" [formGroup]="clubForm" (ngSubmit)="submit()">
+    <mat-form-field appearance="standard">
+      <mat-label>Short Name</mat-label>
+      <input formControlName="shortName" maxlength="64" matInput placeholder="MKŻ Arka" required>
+      <mat-hint>Max 64 chars.</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Full Name</mat-label>
+      <input formControlName="fullName" maxlength="256" matInput placeholder="Miejski Klub Żeglarski ARKA Gdynia" required>
+      <mat-hint>Max 256 chars.</mat-hint>
+    </mat-form-field>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button color="accent" mat-raised-button mat-dialog-close>Cancel</button>
+  <button color="accent" mat-raised-button cdkFocusInitial (click)="this.form.ngSubmit.emit()">Add</button>
+</mat-dialog-actions>
