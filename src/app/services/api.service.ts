@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Club } from "./club";
+import { Club } from "./api.interface";
 import { firstValueFrom } from "rxjs";
 
 const BASE = 'http://localhost:8080';

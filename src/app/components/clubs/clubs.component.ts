@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from "../../services/api.service";
-import { Club } from "../../services/club";
+import { Club } from "../../services/api.interface";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatDialog } from "@angular/material/dialog";
@@ -8,15 +8,18 @@ import { ClubDialogComponent } from "./club-dialog/club-dialog.component";
 import { firstValueFrom } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HttpErrorResponse } from "@angular/common/http";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
 
 @Component({
   selector: 'app-clubs',
   templateUrl: './clubs.component.html',
   styleUrls: ['./clubs.component.scss']
 })
-export class ClubsComponent {
-  // @ts-ignore
-  @ViewChild(MatTable) table: MatTable<Club>;
+export class ClubsComponent implements AfterViewInit {
+  @ViewChild(MatTable) table!: MatTable<Club>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   displayedColumns: string[] = ['select', 'clubId', 'shortName', 'fullName'];
   dataSource = new MatTableDataSource<Club>([])
   selection = new SelectionModel<Club>(true, []);
@@ -24,10 +27,17 @@ export class ClubsComponent {
   constructor(private apiService: ApiService, public dialog: MatDialog, private snackBar: MatSnackBar) {
     apiService.getClubs().then(c => {
       this.dataSource = new MatTableDataSource<Club>(c);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 
-  isAllSelected() {
+  public ngAfterViewInit(): void {
+
+    console.log(this.paginator);
+  }
+
+  public isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
