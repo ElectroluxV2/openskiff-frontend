@@ -5,6 +5,8 @@
 
   .mat-toolbar {
     margin-top: auto;
+    position: sticky;
+    bottom: 0;
   }
   .mat-paginator {
     background: transparent;
