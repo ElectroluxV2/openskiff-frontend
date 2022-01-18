@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Exception details</h1>
+<div mat-dialog-content>
+  <pre>#{{data.exception.status}} - {{data.exception.message}}</pre>
+  <small>{{this.data.exception.error.message}}</small>
+  <pre><small>{{this.data.exception.error.trace}}</small></pre>
+</div>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-actions>

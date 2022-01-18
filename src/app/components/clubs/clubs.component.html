@@ -24,19 +24,13 @@
       </mat-cell>>
     </ng-container>
 
-    <ng-container class="column-id" matColumnDef="clubId">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>#</mat-header-cell>>
-      <mat-cell *matCellDef="let element"> {{element.clubId}} </mat-cell>>
-    </ng-container>
-
-    <ng-container matColumnDef="shortName">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>Short Name</mat-header-cell>>
-      <mat-cell *matCellDef="let element"> {{element.shortName}} </mat-cell>>
-    </ng-container>
-
-    <ng-container matColumnDef="fullName">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>Full Name</mat-header-cell>>
-      <mat-cell *matCellDef="let element"> {{element.fullName}} </mat-cell>>
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+      <mat-header-cell mat-sort-header *matHeaderCellDef>
+        {{column.header}}
+      </mat-header-cell>>
+      <mat-cell *matCellDef="let row">
+        {{column.cell(row)}}
+      </mat-cell>>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>>
@@ -45,11 +39,11 @@
 
   <mat-toolbar>
     <mat-toolbar-row>
-      <button mat-raised-button color="accent" (click)="openDialog()">Add</button>
+      <button mat-raised-button color="accent" (click)="add()">Add</button>
       <button mat-raised-button color="accent" (click)="deleteSelected()">Delete</button>
       <button mat-raised-button color="accent" (click)="editSelected()">Edit</button>
       <span class="spacer"></span>
-      <mat-paginator color="accent" [length]="resultsLength" [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons aria-label="Select page of elements"></mat-paginator>
+      <mat-paginator color="accent" [length]="resultsLength" [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons aria-label="Select page of elements"></mat-paginator>
     </mat-toolbar-row>
   </mat-toolbar>
 

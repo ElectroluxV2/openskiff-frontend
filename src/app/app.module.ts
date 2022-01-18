@@ -20,12 +20,16 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ClubErrorSnackBarComponent } from './components/clubs/club-error-snack-bar/club-error-snack-bar.component';
+import { ErrorDetailsDialogComponent } from './components/clubs/club-error-snack-bar/error-details-dialog/error-details-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ClubsComponent,
-    ClubDialogComponent
+    ClubDialogComponent,
+    ClubErrorSnackBarComponent,
+    ErrorDetailsDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,35 +1,43 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from "../../services/api.service";
-import { Club, Page } from "../../services/api.interface";
+import { ModelEntity, Page } from "../../services/api.interface";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatDialog } from "@angular/material/dialog";
 import { ClubDialogComponent } from "./club-dialog/club-dialog.component";
 import { catchError, firstValueFrom, map, merge, startWith, switchMap, of as observableOf } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { HttpErrorResponse } from "@angular/common/http";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
+import { ClubErrorSnackBarComponent } from "./club-error-snack-bar/club-error-snack-bar.component";
+import { ModelEntityColumn } from "./model-entity-column.interface";
 
 @Component({
-  selector: 'app-clubs',
+  selector: 'app-clubs[columns][name]',
   templateUrl: './clubs.component.html',
   styleUrls: ['./clubs.component.scss']
 })
-export class ClubsComponent implements AfterViewInit {
-  @ViewChild(MatTable) table!: MatTable<Club>;
+export class ClubsComponent implements AfterViewInit, OnInit {
+  @Input('columns') columns!: ModelEntityColumn<ModelEntity>[];
+  @Input('name') modelEntityName!: string;
+
+  @ViewChild(MatTable) table!: MatTable<ModelEntity>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   isLoadingResults = true;
   errorOccurred = false;
 
-  displayedColumns: string[] = ['select', 'clubId', 'shortName', 'fullName'];
-  dataSource = new MatTableDataSource<Club>([]);
+  displayedColumns: string[] = [];
+  dataSource = new MatTableDataSource<ModelEntity>([]);
   resultsLength = 0;
-  selection = new SelectionModel<Club>(true, []);
+  selection = new SelectionModel<ModelEntity>(true, []);
 
   constructor(private apiService: ApiService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
+
+  public ngOnInit(): void {
+    this.displayedColumns = ['select', ...this.columns.map(c => c.columnDef)]
+  }
 
   public async ngAfterViewInit(): Promise<void> {
     // If the user changes the sort order, reset back to the first page.
@@ -40,9 +48,9 @@ export class ClubsComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.apiService.getClubs(
-            new Page(this.paginator, this.sort)
-          ).pipe(catchError(() => observableOf(null)));
+          return this.apiService
+            .getAll(this.modelEntityName, new Page(this.paginator, this.sort))
+            .pipe(catchError(() => observableOf(null)));
         }),
         map(data => {
           // Flip flag to show that loading has finished.
@@ -56,42 +64,48 @@ export class ClubsComponent implements AfterViewInit {
           // Only refresh the result length if there is new data. In case of rate
           // limit errors, we do not want to reset the paginator to zero, as that
           // would prevent users from re-triggering requests.
-          console.log(data.page)
-
           this.resultsLength = data.page.totalElements;
-
-          console.log(this.resultsLength)
           return data.items;
         }),
       )
       .subscribe(data => (this.dataSource.data = data));
   }
 
-  public async openDialog(): Promise<void> {
-    const dialogRef = this.dialog.open(ClubDialogComponent);
+  public async openDialog(sourceObject?: ModelEntity): Promise<void> {
+    const dialogRef = this.dialog.open(ClubDialogComponent, {
+      data: {
+        sourceObject
+      }
+    });
 
-    const club: Club = await firstValueFrom(dialogRef.afterClosed());
-    if (!(club instanceof Object)) return;
+    const item: ModelEntity = await firstValueFrom(dialogRef.afterClosed());
+    if (!(item instanceof Object)) return;
 
     try {
-      club.clubId = await this.apiService.saveClub(club) as number;
+      await this.apiService.save(this.modelEntityName, item);
       this.paginator.page.emit(); // Refresh results
     } catch (exception) {
       await this.handleError(exception);
     }
   }
 
+  public async add(): Promise<void> {
+    await this.openDialog();
+  }
+
   public async editSelected(): Promise<void> {
-    // console.log(this.selection.selected);
-    // for (const club of this.selection.selected) {
-    //
-    // }
+
+    for (const item of this.selection.selected) {
+
+    }
+
+    this.selection.clear();
   }
 
   public async deleteSelected(): Promise<void> {
-    for (const club of this.selection.selected) {
+    for (const item of this.selection.selected) {
       try {
-        await this.apiService.deleteClub(club);
+        await this.apiService.delete(this.modelEntityName, item);
         this.selection.clear(); // Remove selection
         this.paginator.page.emit(); // Refresh results
       } catch (exception) {
@@ -101,14 +115,16 @@ export class ClubsComponent implements AfterViewInit {
   }
 
   private async handleError(exception: unknown): Promise<void> {
-    const ref = this.snackBar.open('An error occurred', 'Show', {
-      horizontalPosition: 'start',
-      verticalPosition: 'bottom',
-      duration: 2000
+    console.log(exception)
+    this.snackBar.openFromComponent(ClubErrorSnackBarComponent, {
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['mat-toolbar', 'mat-warn'],
+      duration: 15000,
+      data: {
+        exception
+      }
     });
-
-    await firstValueFrom(ref.onAction());
-    window.alert((<HttpErrorResponse>exception).error.message);
   }
 
   public isAllSelected(): boolean {
@@ -128,10 +144,10 @@ export class ClubsComponent implements AfterViewInit {
   }
 
   /** The label for the checkbox on the passed row */
-  public checkboxLabel(row?: Club): string {
+  public checkboxLabel(row?: ModelEntity): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.clubId}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.ids}`;
   }
 }

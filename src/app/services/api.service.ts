@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Club, Page, PagedResponse } from "./api.interface";
+import { ModelEntity, Page, PagedResponse } from "./api.interface";
 import { firstValueFrom, Observable } from "rxjs";
 
 const BASE = 'http://localhost:8080';
@@ -11,15 +11,19 @@ const BASE = 'http://localhost:8080';
 export class ApiService {
   constructor(private http: HttpClient) { }
 
-  public getClubs(page: Page): Observable<PagedResponse<Club>> {
-    return this.http.post<PagedResponse<Club>>(`${BASE}/clubs/`, page);
+  public getAll<T extends ModelEntity>(name: string, page: Page): Observable<PagedResponse<T>> {
+    return this.http.post<PagedResponse<T>>(`${BASE}/${name}/getAll`, page);
   }
 
-  async saveClub(club: Club) {
-    return await firstValueFrom(this.http.post(`${BASE}/clubs/save`, club));
+  public get<T extends ModelEntity>(name: string, item: T): Observable<PagedResponse<T>> {
+    return this.http.post<PagedResponse<T>>(`${BASE}/${name}/get`, item.id);
   }
 
-  async deleteClub(club: Club) {
-    return await firstValueFrom(this.http.delete(`${BASE}/clubs/${club.clubId}`));
+  async save<T extends ModelEntity>(name: string, item: T) {
+    return await firstValueFrom(this.http.post(`${BASE}/${name}/save`, item));
+  }
+
+  async delete<T extends ModelEntity>(name: string, item: T) {
+    return await firstValueFrom(this.http.post(`${BASE}/${name}/delete`, item.id));
   }
 }

@@ -1,10 +1,27 @@
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
-export interface Club {
-  clubId: number;
-  shortName: string;
-  fullName: string;
+export interface ModelEntity {
+  get id(): any;
+  get ids(): string;
+}
+
+export class Club implements ModelEntity {
+  clubId?: number;
+  shortName?: string;
+  fullName?: string;
+
+  constructor(init?: Partial<Club>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return this.clubId;
+  }
+
+  get ids() {
+    return `${this.clubId}`;
+  }
 }
 
 export interface Penalty {
@@ -65,12 +82,24 @@ export interface SailingNumbersAssociatedToSailor {
   sailNumber: string;
 }
 
-export interface Sailor {
-  sailorId: number;
-  sex: string;
-  birthDate: Date;
-  givenName: string;
-  familyName: string;
+export class Sailor implements ModelEntity {
+  sailorId?: number;
+  sex?: string;
+  birthDate?: Date;
+  givenName?: string;
+  familyName?: string;
+
+  constructor(init?: Partial<Sailor>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return this.sailorId;
+  }
+
+  get ids() {
+    return `${this.sailorId}`;
+  }
 }
 
 export interface StartingList {
