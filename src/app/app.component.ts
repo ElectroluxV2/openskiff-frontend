@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModelEntityColumn } from "./components/clubs/model-entity-column.interface";
-import { Club, ModelEntity, Sailor } from "./services/api.interface";
+import { Club, ModelEntity, Penalty, Race, Regatta, Sailor, YearCategory } from "./services/api.interface";
 
 interface Table {
   modelEntityName: string;
@@ -15,7 +15,7 @@ interface Table {
 })
 export class AppComponent {
   tables: Table[] = [{
-    modelEntityName: 'club',
+    modelEntityName: 'Club',
     label: 'Clubs',
     columns: [{
       columnDef: 'clubId',
@@ -31,7 +31,7 @@ export class AppComponent {
       cell: (element: Club) => `${element.fullName}`
     }]
   }, {
-    modelEntityName: 'sailor',
+    modelEntityName: 'Sailor',
     label: 'Sailors',
     columns: [{
       columnDef: 'sailorId',
@@ -53,6 +53,58 @@ export class AppComponent {
       columnDef: 'familyName',
       header: 'Family name',
       cell: (element: Sailor) => `${element.familyName}`
+    }]
+  }, {
+    modelEntityName: 'Race',
+    label: 'Races',
+    columns: [{
+      columnDef: 'raceNumber',
+      header: '#',
+      cell: (element: Race) => `${element.raceNumber}`
+    }, {
+      columnDef: 'regattaId',
+      header: 'Regatta Id',
+      cell: (element: Race) => `${element.regattaId}`
+    }]
+  }, {
+    modelEntityName: 'YearCategory',
+    label: 'Year categories',
+    columns: [{
+      columnDef: 'yearCategory',
+      header: 'Category',
+      cell: (element: YearCategory) => `${element.category}`
+    }, {
+      columnDef: 'youngerThan',
+      header: 'Younger than',
+      cell: (element: YearCategory) => `${element.youngerThan}`
+    }]
+  }, {
+    modelEntityName: 'Penalty',
+    label: 'Penalties',
+    columns: [{
+      columnDef: 'regattaId',
+      header: 'Regatta Id',
+      cell: (element: Penalty) => `${element.regattaId}`
+    }, {
+      columnDef: 'raceNumber',
+      header: 'Race number',
+      cell: (element: Penalty) => `${element.raceNumber}`
+    }, {
+      columnDef: 'sailNumber',
+      header: 'Sail number',
+      cell: (element: Penalty) => `${element.sailNumber}`
+    }, {
+      columnDef: 'abbreviation',
+      header: 'Abbreviation',
+      cell: (element: Penalty) => `${element.abbreviation}`
+    }]
+  }, {
+    modelEntityName: 'Regatta',
+    label: 'Regattas',
+    columns: [{
+      columnDef: 'regattaId',
+      header: 'Regatta Id',
+      cell: (element: Regatta) => `${element.regattaId}`
     }]
   }];
 }

@@ -18,7 +18,7 @@ import { ModelEntityColumn } from "./model-entity-column.interface";
   styleUrls: ['./clubs.component.scss']
 })
 export class ClubsComponent implements AfterViewInit, OnInit {
-  @Input('columns') columns!: ModelEntityColumn<ModelEntity>[];
+  @Input('columns') columnsRaw!: ModelEntityColumn<ModelEntity>[];
   @Input('name') modelEntityName!: string;
 
   @ViewChild(MatTable) table!: MatTable<ModelEntity>;
@@ -27,6 +27,7 @@ export class ClubsComponent implements AfterViewInit, OnInit {
 
   isLoadingResults = true;
   errorOccurred = false;
+  columns: ModelEntityColumn<ModelEntity>[] = [];
 
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<ModelEntity>([]);
@@ -36,6 +37,12 @@ export class ClubsComponent implements AfterViewInit, OnInit {
   constructor(private apiService: ApiService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   public ngOnInit(): void {
+    this.columnsRaw.forEach(c => {
+      if (!c.cell) return;
+      // @ts-ignore
+      c.cell = (x => `${x[c.columnDef]}`);
+    })
+    this.columns = this.columnsRaw;
     this.displayedColumns = ['select', ...this.columns.map(c => c.columnDef)]
   }
 
