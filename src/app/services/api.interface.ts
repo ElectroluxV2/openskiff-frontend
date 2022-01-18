@@ -24,62 +24,177 @@ export class Club implements ModelEntity {
   }
 }
 
-export interface Penalty {
-  regattaId: number;
-  raceNumber: number;
-  sailNumber: string;
-  abbreviation: string;
+export class Penalty implements ModelEntity {
+  regattaId?: number;
+  raceNumber?: number;
+  sailNumber?: string;
+  abbreviation?: string;
+
+  constructor(init?: Partial<Penalty>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return {
+      regattaId: this.regattaId,
+      raceNumber: this.raceNumber,
+      sailNumber: this.sailNumber
+    };
+  }
+
+  get ids() {
+    return `${this.regattaId}|${this.raceNumber}|${this.sailNumber}`;
+  }
 }
 
-export interface Place {
-  placeId: number;
-  location: string;
-  name: string;
+export class Place implements ModelEntity {
+  placeId?: number;
+  location?: string;
+  name?: string;
+
+  constructor(init?: Partial<Place>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return this.placeId;
+  }
+
+  get ids() {
+    return `${this.placeId}`;
+  }
 }
 
-export interface Race {
-  regattaId: number;
-  raceNumber: number;
+export class Race implements ModelEntity {
+  regattaId?: number;
+  raceNumber?: number;
+
+  constructor(init?: Partial<Race>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return {
+      regattaId: this.regattaId,
+      raceNumber: this.raceNumber
+    };
+  }
+
+  get ids() {
+    return `${this.regattaId}|${this.raceNumber}}`;
+  }
 }
 
-export interface RacesFinishLineList {
-  regattaId: number;
-  raceNumber: number;
-  sailNumber: string;
-  place: number;
+export class RacesFinishLineList implements ModelEntity {
+  regattaId?: number;
+  raceNumber?: number;
+  sailNumber?: string;
+  place?: number;
+
+  constructor(init?: Partial<RacesFinishLineList>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return {
+      regattaId: this.regattaId,
+      raceNumber: this.raceNumber,
+      sailNumber: this.sailNumber
+    };
+  }
+
+  get ids() {
+    return `${this.regattaId}|${this.raceNumber}|${this.sailNumber}`;
+  }
 }
 
-export interface Regatta {
-  regattaId: number;
-  placeId: number;
-  exclusions: number;
-  beginDate: Date;
-  endDate: Date;
-  name: string;
+export class Regatta implements ModelEntity {
+  regattaId?: number;
+  placeId?: number;
+  exclusions?: number;
+  beginDate?: Date;
+  endDate?: Date;
+  name?: string;
+
+  constructor(init?: Partial<Regatta>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return this.regattaId;
+  }
+
+  get ids() {
+    return `${this.regattaId}`;
+  }
 }
 
-export interface Result {
-  regattaId: number;
-  exclusions: number;
-  sailorId: number;
-  sailNumber: number;
-  raceNumber: number;
-  place: number;
-  abbreviation: string;
-  points: number;
-  minPoint: number;
-  totalPoints: number;
+export class Result implements ModelEntity {
+  regattaId?: number;
+  exclusions?: number;
+  sailorId?: number;
+  sailNumber?: number;
+  raceNumber?: number;
+  place?: number;
+  abbreviation?: string;
+  points?: number;
+  minPoint?: number;
+  totalPoints?: number;
+
+  constructor(init?: Partial<Result>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return {
+      regattaId: this.regattaId,
+      raceNumber: this.raceNumber,
+      sailNumber: this.sailNumber
+    };
+  }
+
+  get ids() {
+    return `${this.regattaId}|${this.raceNumber}|${this.sailNumber}`;
+  }
 }
 
-export interface ResultsAbbreviation {
-  shortName: string;
-  fullName: string;
+export class ResultsAbbreviation implements ModelEntity {
+  shortName?: string;
+  fullName?: string;
+
+  constructor(init?: Partial<ResultsAbbreviation>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return this.shortName;
+  }
+
+  get ids() {
+    return `${this.shortName}`;
+  }
 }
 
-export interface SailingNumbersAssociatedToSailor {
-  sailorId: number;
-  regattaId: number;
-  sailNumber: string;
+export class SailingNumbersAssociatedToSailor implements ModelEntity {
+  sailorId?: number;
+  regattaId?: number;
+  sailNumber?: string;
+
+  constructor(init?: Partial<SailingNumbersAssociatedToSailor>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return {
+      sailorId: this.sailorId,
+      regattaId: this.regattaId,
+      sailNumber: this.sailNumber
+    };
+  }
+
+  get ids() {
+    return `${this.sailorId}|${this.regattaId}|${this.sailNumber}`;
+  }
 }
 
 export class Sailor implements ModelEntity {
@@ -102,15 +217,42 @@ export class Sailor implements ModelEntity {
   }
 }
 
-export interface StartingList {
-  regattaId: number;
-  sailorId: number;
-  clubId: number;
+export class StartingList implements ModelEntity {
+  regattaId?: number;
+  sailorId?: number;
+  clubId?: number;
+
+  constructor(init?: Partial<StartingList>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return {
+      regattaId: this.regattaId,
+      sailorId: this.sailorId
+    };
+  }
+
+  get ids() {
+    return `${this.regattaId}|${this.sailorId}|${this.clubId}`;
+  }
 }
 
-export interface YearCategory {
-  category: string;
-  youngerThan: number;
+export class YearCategory implements ModelEntity {
+  category?: string;
+  youngerThan?: number;
+
+  constructor(init?: Partial<YearCategory>) {
+    Object.assign(this, init);
+  }
+
+  get id() {
+    return this.category;
+  }
+
+  get ids() {
+    return `${this.category}`;
+  }
 }
 
 
