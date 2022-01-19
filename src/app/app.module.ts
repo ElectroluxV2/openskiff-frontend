@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from "@angular/material/tabs";
 import { TableViewComponent } from './components/table-view/table-view.component';
 import { MatTableModule } from "@angular/material/table";
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -22,6 +22,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { TableViewErrorSnackBarComponent } from './components/view-error-snack-bar/table-view-error-snack-bar.component';
 import { ErrorDetailsDialogComponent } from './components/view-error-snack-bar/error-details-dialog/error-details-dialog.component';
+import { HttpErrorInterceptor } from "./services/http-error.interceptor";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,11 @@ import { ErrorDetailsDialogComponent } from './components/view-error-snack-bar/e
     MatSortModule,
     MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpErrorInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

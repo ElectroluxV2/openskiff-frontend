@@ -88,8 +88,10 @@ export class TableViewComponent implements AfterViewInit, OnInit {
     if (!(item instanceof Object)) return;
 
     try {
+      this.isLoadingResults = true;
       await this.apiService.save(this.modelEntityName, item); // Changes will be refreshed through WS packet
       // TODO: Optimistic visual changes, we can assume that it will succeed and imitate visual effects in table until response will come back.
+
     } catch (exception) {
       await this.handleError(exception);
     }
@@ -111,6 +113,7 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   public async deleteSelected(): Promise<void> {
     for (const item of this.selection.selected) {
       try {
+        this.isLoadingResults = true;
         await this.apiService.delete(this.modelEntityName, item); // Changes will be refreshed through WS packet
         // TODO: Optimistic visual changes, we can assume that it will succeed and imitate visual effects in table until response will come back.
         this.selection.clear(); // Remove selection
@@ -121,7 +124,6 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   }
 
   private async handleError(exception: unknown): Promise<void> {
-    console.log(exception)
     this.snackBar.openFromComponent(TableViewErrorSnackBarComponent, {
       horizontalPosition: 'end',
       verticalPosition: 'top',
