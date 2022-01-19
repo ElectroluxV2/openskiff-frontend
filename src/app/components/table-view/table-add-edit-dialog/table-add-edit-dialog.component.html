@@ -17,5 +17,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button color="accent" mat-raised-button mat-dialog-close>Cancel</button>
-  <button color="accent" mat-raised-button (click)="this.form.ngSubmit.emit()">Add</button>
+  <button color="accent" mat-raised-button (click)="this.form.ngSubmit.emit()">{{!!data.sourceObject ? 'Save' : 'Add'}}</button>
 </mat-dialog-actions>
