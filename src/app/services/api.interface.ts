@@ -278,3 +278,7 @@ export interface PagedResponse<T> {
   page: Page;
   items: T[];
 }
+
+export interface NotifyPacket {
+  table: string;
+}

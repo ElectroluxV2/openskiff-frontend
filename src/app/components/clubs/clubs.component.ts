@@ -5,7 +5,7 @@ import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatDialog } from "@angular/material/dialog";
 import { ClubDialogComponent } from "./club-dialog/club-dialog.component";
-import { catchError, firstValueFrom, map, merge, startWith, switchMap, of as observableOf } from "rxjs";
+import { catchError, firstValueFrom, map, merge, startWith, switchMap, of as observableOf, filter } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -33,7 +33,13 @@ export class ClubsComponent implements AfterViewInit, OnInit {
   resultsLength = 0;
   selection = new SelectionModel<ModelEntity>(true, []);
 
-  constructor(private apiService: ApiService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
+  constructor(private apiService: ApiService, public dialog: MatDialog, private snackBar: MatSnackBar) {
+    apiService.tableChangeNotifier
+      .pipe(filter(packet => packet.table === this.modelEntityName))
+      .subscribe(packet => {
+        this.paginator.page.emit();
+    });
+  }
 
   public ngOnInit(): void {
     this.displayedColumns = ['select', ...this.columns.map(c => c.columnDef)]
@@ -82,8 +88,8 @@ export class ClubsComponent implements AfterViewInit, OnInit {
     if (!(item instanceof Object)) return;
 
     try {
-      await this.apiService.save(this.modelEntityName, item);
-      this.paginator.page.emit(); // Refresh results
+      await this.apiService.save(this.modelEntityName, item); // Changes will be refreshed through WS packet
+      // TODO: Optimistic visual changes, we can assume that it will succeed and imitate visual effects in table until response will come back.
     } catch (exception) {
       await this.handleError(exception);
     }
@@ -105,9 +111,9 @@ export class ClubsComponent implements AfterViewInit, OnInit {
   public async deleteSelected(): Promise<void> {
     for (const item of this.selection.selected) {
       try {
-        await this.apiService.delete(this.modelEntityName, item);
+        await this.apiService.delete(this.modelEntityName, item); // Changes will be refreshed through WS packet
+        // TODO: Optimistic visual changes, we can assume that it will succeed and imitate visual effects in table until response will come back.
         this.selection.clear(); // Remove selection
-        this.paginator.page.emit(); // Refresh results
       } catch (exception) {
         await this.handleError(exception);
       }
