@@ -1,6 +1,13 @@
-import { Component, ViewChild} from '@angular/core';
-import { FormBuilder, NgForm, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { Component, Inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { ModelEntity } from "../../../services/api.interface";
+import { Table } from "../table";
+
+interface AddEditDialogData {
+  table: Table<ModelEntity>;
+  sourceObject?: ModelEntity;
+}
 
 @Component({
   selector: 'app-table-add-edit-dialog',
@@ -8,18 +15,31 @@ import { MatDialogRef } from "@angular/material/dialog";
   styleUrls: ['./table-add-edit-dialog.component.scss']
 })
 export class TableAddEditDialogComponent {
-  // @ts-ignore
-  @ViewChild('form') form: NgForm;
+  @ViewChild('form') form!: NgForm;
+  public modelEntityForm: FormGroup;
 
-  clubForm = this.fb.group({
-    shortName: ['', [Validators.required, Validators.max(64), Validators.nullValidator]],
-    fullName: ['', [Validators.required, Validators.max(256), Validators.nullValidator]]
-  })
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<TableAddEditDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: AddEditDialogData) {
+    const controlsConfig: {
+      [key: string]: any;
+    } = {};
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<TableAddEditDialogComponent>) { }
+    for (const column of data.table.columns) {
+      controlsConfig[column.columnDef] = [this.getValue(column.columnDef), column.controlsConfig];
+    }
+
+    this.modelEntityForm = this.fb.group(controlsConfig);
+  }
 
   public submit(): void {
-    if (this.clubForm.invalid) return;
-    this.dialogRef.close(this.clubForm.value);
+    if (this.modelEntityForm.invalid) return;
+    this.dialogRef.close(this.modelEntityForm.value);
+  }
+
+  public getValue(columnDef: string): string {
+    if (this.data.sourceObject) {
+      console.log(this.data.sourceObject[columnDef])
+    }
+
+    return !!this.data.sourceObject ? this.data.sourceObject[columnDef] : '';
   }
 }

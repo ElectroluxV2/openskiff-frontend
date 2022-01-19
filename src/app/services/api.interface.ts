@@ -4,6 +4,7 @@ import { MatSort } from "@angular/material/sort";
 export interface ModelEntity {
   get id(): any;
   get ids(): string;
+  [key: string]: any;
 }
 
 export class Club implements ModelEntity {
@@ -255,7 +256,6 @@ export class YearCategory implements ModelEntity {
   }
 }
 
-
 export class Page {
   size: number;
   totalElements: number;
@@ -281,4 +281,19 @@ export interface PagedResponse<T> {
 
 export interface NotifyPacket {
   table: string;
+}
+
+type Class = { new(...args: any[]): any; };
+export const MODEl_ENTITIES: { [key: string]: Class } = {
+  'Club': Club,
+  'Penalty': Penalty,
+  'Place': Place,
+  'Race': Race,
+  'RacesFinishLineList': RacesFinishLineList,
+  'Regatta': Regatta,
+  'ResultsAbbreviation': ResultsAbbreviation,
+  'SailingNumbersAssociatedToSailor': SailingNumbersAssociatedToSailor,
+  'Sailor': Sailor,
+  'StartingList': StartingList,
+  'YearCategory': YearCategory
 }

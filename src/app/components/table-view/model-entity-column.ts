@@ -1,14 +1,36 @@
 import { ModelEntity } from "../../services/api.interface";
 
-export class ModelEntityColumn<T extends ModelEntity> {
+export interface ModelEntityColumnSource {
   columnDef: string;
   header: string;
-  cellFunction?: (element: T) => string;
+  id?: boolean;
+  required?: boolean;
+  hint?: string;
+  placeholder?: string;
+  controlsConfig?: {
+    [key: string]: any;
+  };
+  cell?: (entity: {[prop: string]: any}) => string;
+}
 
-  constructor(columnDef: string, header: string, cell?: (element: T) => string) {
-    this.columnDef = columnDef;
-    this.header = header;
-    this.cellFunction = cell;
+export class ModelEntityColumn<T extends ModelEntity> implements ModelEntityColumnSource {
+  readonly columnDef: string;
+  readonly header: string;
+  readonly id: boolean = false;
+  readonly required: boolean = false;
+  readonly hint: string = '';
+  readonly placeholder: string = '';
+  readonly controlsConfig: [] = [];
+  private readonly cellFunction?: (element: T) => string;
+
+  constructor(source: ModelEntityColumnSource) {
+    this.columnDef = source.columnDef;
+    this.header = source.header;
+    this.id = source.id ?? false;
+    this.required = source.required ?? true;
+    this.hint = source.hint ?? '';
+    this.placeholder = source.placeholder ?? '';
+    this.cellFunction = source.cell ?? undefined;
   }
 
   public cell(entity: {[prop: string]: any}): string {
@@ -17,11 +39,11 @@ export class ModelEntityColumn<T extends ModelEntity> {
   }
 }
 
-export function from<T extends ModelEntity>(source: {columnDef: string, header: string}[]): ModelEntityColumn<T>[] {
+export function from<T extends ModelEntity>(source: ModelEntityColumnSource[]): ModelEntityColumn<T>[] {
   const output: ModelEntityColumn<T>[] = [];
 
   for (const row of source) {
-    output.push(new ModelEntityColumn<T>(row.columnDef, row.header));
+    output.push(new ModelEntityColumn<T>(row));
   }
 
   return output;
