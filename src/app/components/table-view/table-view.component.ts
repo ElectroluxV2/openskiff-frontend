@@ -10,17 +10,16 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { TableViewErrorSnackBarComponent } from "../view-error-snack-bar/table-view-error-snack-bar.component";
-import { ModelEntityColumn } from "./model-entity-column";
+import { Table } from "./table";
+
 
 @Component({
-  selector: 'app-table-view[name][columns]',
+  selector: 'app-table-view[table]',
   templateUrl: './table-view.component.html',
   styleUrls: ['./table-view.component.scss']
 })
 export class TableViewComponent implements AfterViewInit, OnInit {
-  @Input('name') modelEntityName!: string;
-  @Input('columns') columns!: ModelEntityColumn<ModelEntity>[];
-
+  @Input('table') sourceDatabaseTable!: Table<ModelEntity>;
   @ViewChild(MatTable) table!: MatTable<ModelEntity>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -35,14 +34,14 @@ export class TableViewComponent implements AfterViewInit, OnInit {
 
   constructor(private apiService: ApiService, public dialog: MatDialog, private snackBar: MatSnackBar) {
     apiService.tableChangeNotifier
-      .pipe(filter(packet => packet.table === this.modelEntityName))
+      .pipe(filter(packet => packet.table === this.sourceDatabaseTable.modelEntityName))
       .subscribe(packet => {
         this.paginator.page.emit();
     });
   }
 
   public ngOnInit(): void {
-    this.displayedColumns = ['select', ...this.columns.map(c => c.columnDef)]
+    this.displayedColumns = ['select', ...this.sourceDatabaseTable.columns.map(c => c.columnDef)]
   }
 
   public async ngAfterViewInit(): Promise<void> {
@@ -55,7 +54,7 @@ export class TableViewComponent implements AfterViewInit, OnInit {
         switchMap(() => {
           this.isLoadingResults = true;
           return this.apiService
-            .getAll(this.modelEntityName, new Page(this.paginator, this.sort))
+            .getAll(this.sourceDatabaseTable.modelEntityName, new Page(this.paginator, this.sort))
             .pipe(catchError(() => observableOf(null)));
         }),
         map(data => {
@@ -78,8 +77,10 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   }
 
   public async openDialog(sourceObject?: ModelEntity): Promise<void> {
+    console.log(sourceObject)
     const dialogRef = this.dialog.open(TableAddEditDialogComponent, {
       data: {
+        table: this.sourceDatabaseTable,
         sourceObject
       }
     });
@@ -89,10 +90,11 @@ export class TableViewComponent implements AfterViewInit, OnInit {
 
     try {
       this.isLoadingResults = true;
-      await this.apiService.save(this.modelEntityName, item); // Changes will be refreshed through WS packet
+      await this.apiService.save(this.sourceDatabaseTable.modelEntityName, item); // Changes will be refreshed through WS packet
       // TODO: Optimistic visual changes, we can assume that it will succeed and imitate visual effects in table until response will come back.
 
     } catch (exception) {
+      this.isLoadingResults = false;
       await this.handleError(exception);
     }
   }
@@ -104,20 +106,20 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   public async editSelected(): Promise<void> {
 
     for (const item of this.selection.selected) {
-
+      await this.openDialog(item);
+      this.selection.toggle(item);
     }
-
-    this.selection.clear();
   }
 
   public async deleteSelected(): Promise<void> {
     for (const item of this.selection.selected) {
       try {
         this.isLoadingResults = true;
-        await this.apiService.delete(this.modelEntityName, item); // Changes will be refreshed through WS packet
+        await this.apiService.delete(this.sourceDatabaseTable.modelEntityName, item); // Changes will be refreshed through WS packet
         // TODO: Optimistic visual changes, we can assume that it will succeed and imitate visual effects in table until response will come back.
         this.selection.clear(); // Remove selection
       } catch (exception) {
+        this.isLoadingResults = false;
         await this.handleError(exception);
       }
     }

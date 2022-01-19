@@ -4,6 +4,7 @@ import { MatSort } from "@angular/material/sort";
 export interface ModelEntity {
   get id(): any;
   get ids(): string;
+  [key: string]: any;
 }
 
 export class Club implements ModelEntity {

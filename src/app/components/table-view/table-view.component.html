@@ -1,12 +1,11 @@
 <article class="container">
 
-  <div class="loading-shade"  *ngIf="isLoadingResults || errorOccurred">
+  <div class="loading-shade" *ngIf="isLoadingResults || errorOccurred">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
     <div class="unexpected-error" *ngIf="errorOccurred">An unexpected error occurred.</div>
   </div>
 
   <mat-table matSort matSortDisableClear [dataSource]="dataSource">
-
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -24,13 +23,13 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+    <ng-container *ngFor="let column of sourceDatabaseTable.columns" [matColumnDef]="column.columnDef">
       <mat-header-cell mat-sort-header *matHeaderCellDef>
         {{column.header}}
-      </mat-header-cell>>
+      </mat-header-cell>
       <mat-cell *matCellDef="let row">
         {{column.cell(row) }}
-      </mat-cell>>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>>
@@ -39,9 +38,9 @@
 
   <mat-toolbar>
     <mat-toolbar-row>
-      <button mat-raised-button color="accent" (click)="add()">Add</button>
-      <button mat-raised-button color="accent" (click)="deleteSelected()">Delete</button>
-      <button mat-raised-button color="accent" (click)="editSelected()">Edit</button>
+      <button *ngIf="sourceDatabaseTable.actions.add" mat-raised-button color="accent" (click)="add()">Add</button>
+      <button *ngIf="sourceDatabaseTable.actions.delete" mat-raised-button color="accent" (click)="deleteSelected()">Delete</button>
+      <button *ngIf="sourceDatabaseTable.actions.edit" mat-raised-button color="accent" (click)="editSelected()">Edit</button>
       <span class="spacer"></span>
       <mat-paginator color="accent" [length]="resultsLength" [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" showFirstLastButtons aria-label="Select page of elements"></mat-paginator>
     </mat-toolbar-row>
