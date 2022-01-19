@@ -10,7 +10,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { TableViewErrorSnackBarComponent } from "../view-error-snack-bar/table-view-error-snack-bar.component";
-import { ModelEntityColumn } from "./model-entity-column.interface";
+import { ModelEntityColumn } from "./model-entity-column";
 
 @Component({
   selector: 'app-table-view[name][columns]',

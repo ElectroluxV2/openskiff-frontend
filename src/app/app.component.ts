@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { from, ModelEntityColumn } from "./components/table-view/model-entity-column.interface";
+import { from, ModelEntityColumn } from "./components/table-view/model-entity-column";
 import { Club, ModelEntity, Penalty, Race, Regatta, Sailor, YearCategory } from "./services/api.interface";
 
 interface Table {
