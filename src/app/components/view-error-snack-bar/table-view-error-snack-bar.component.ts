@@ -5,7 +5,7 @@ import { ErrorDetailsDialogComponent } from "./error-details-dialog/error-detail
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-  selector: 'app-table-view-error-snack-bar',
+  selector: 'app-view-error-snack-bar',
   templateUrl: './table-view-error-snack-bar.component.html',
   styleUrls: ['./table-view-error-snack-bar.component.scss']
 })

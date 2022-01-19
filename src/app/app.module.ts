@@ -20,8 +20,8 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { TableViewErrorSnackBarComponent } from './components/table-view/table-view-error-snack-bar/table-view-error-snack-bar.component';
-import { ErrorDetailsDialogComponent } from './components/table-view/table-view-error-snack-bar/error-details-dialog/error-details-dialog.component';
+import { TableViewErrorSnackBarComponent } from './components/view-error-snack-bar/table-view-error-snack-bar.component';
+import { ErrorDetailsDialogComponent } from './components/view-error-snack-bar/error-details-dialog/error-details-dialog.component';
 
 @NgModule({
   declarations: [

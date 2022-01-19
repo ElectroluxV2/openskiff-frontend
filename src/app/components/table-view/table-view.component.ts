@@ -9,7 +9,7 @@ import { catchError, firstValueFrom, map, merge, startWith, switchMap, of as obs
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { TableViewErrorSnackBarComponent } from "./table-view-error-snack-bar/table-view-error-snack-bar.component";
+import { TableViewErrorSnackBarComponent } from "../view-error-snack-bar/table-view-error-snack-bar.component";
 import { ModelEntityColumn } from "./model-entity-column.interface";
 
 @Component({
