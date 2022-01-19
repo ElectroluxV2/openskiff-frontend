@@ -4,7 +4,7 @@ import { ModelEntity, Page } from "../../services/api.interface";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatDialog } from "@angular/material/dialog";
-import { ClubDialogComponent } from "./club-dialog/club-dialog.component";
+import { TableAddEditDialogComponent } from "./table-add-edit-dialog/table-add-edit-dialog.component";
 import { catchError, firstValueFrom, map, merge, startWith, switchMap, of as observableOf, filter } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator } from "@angular/material/paginator";
@@ -78,7 +78,7 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   }
 
   public async openDialog(sourceObject?: ModelEntity): Promise<void> {
-    const dialogRef = this.dialog.open(ClubDialogComponent, {
+    const dialogRef = this.dialog.open(TableAddEditDialogComponent, {
       data: {
         sourceObject
       }

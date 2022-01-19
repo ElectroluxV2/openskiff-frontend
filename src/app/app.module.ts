@@ -11,7 +11,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialogModule } from "@angular/material/dialog";
-import { ClubDialogComponent } from './components/table-view/club-dialog/club-dialog.component';
+import { TableAddEditDialogComponent } from './components/table-view/table-add-edit-dialog/table-add-edit-dialog.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -27,7 +27,7 @@ import { ErrorDetailsDialogComponent } from './components/table-view/table-view-
   declarations: [
     AppComponent,
     TableViewComponent,
-    ClubDialogComponent,
+    TableAddEditDialogComponent,
     TableViewErrorSnackBarComponent,
     ErrorDetailsDialogComponent
   ],
