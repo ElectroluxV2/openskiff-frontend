@@ -19,17 +19,13 @@ export class TableAddEditDialogComponent {
   public modelEntityForm: FormGroup;
 
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<TableAddEditDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: AddEditDialogData) {
-    console.log(data)
-
     const controlsConfig: {
       [key: string]: any;
     } = {};
 
     for (const column of data.table.columns) {
-      controlsConfig[column.columnDef] = column.controlsConfig;
+      controlsConfig[column.columnDef] = [this.getValue(column.columnDef), column.controlsConfig];
     }
-
-    console.log(controlsConfig)
 
     this.modelEntityForm = this.fb.group(controlsConfig);
   }
@@ -40,6 +36,10 @@ export class TableAddEditDialogComponent {
   }
 
   public getValue(columnDef: string): string {
-    return !!this.data.sourceObject ? this.data.sourceObject['shortName'] : 'a';
+    if (this.data.sourceObject) {
+      console.log(this.data.sourceObject[columnDef])
+    }
+
+    return !!this.data.sourceObject ? this.data.sourceObject[columnDef] : '';
   }
 }

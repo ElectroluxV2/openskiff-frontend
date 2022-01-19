@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { ModelEntity, NotifyPacket, Page, PagedResponse } from "./api.interface";
-import { firstValueFrom, Observable } from "rxjs";
+import { MODEl_ENTITIES, ModelEntity, NotifyPacket, Page, PagedResponse } from "./api.interface";
+import { firstValueFrom, map, Observable } from "rxjs";
 
 const BASE = 'http://localhost:8080';
 const WS = 'ws://localhost:3000';
@@ -44,11 +44,14 @@ export class ApiService {
   }
 
   public getAll<T extends ModelEntity>(name: string, page: Page): Observable<PagedResponse<T>> {
-    return this.http.post<PagedResponse<T>>(`${BASE}/${name}/getAll`, page);
+    return this.http.post<PagedResponse<T>>(`${BASE}/${name}/getAll`, page).pipe(map(pagedResponse => {
+      pagedResponse.items = pagedResponse.items.map(item => new MODEl_ENTITIES[name](item));
+      return pagedResponse;
+    }));
   }
 
-  public get<T extends ModelEntity>(name: string, item: T): Observable<PagedResponse<T>> {
-    return this.http.post<PagedResponse<T>>(`${BASE}/${name}/get`, item.id);
+  public get<T extends ModelEntity>(name: string, item: T): Observable<T> {
+    return this.http.post<T>(`${BASE}/${name}/get`, item.id).pipe(map(item => new MODEl_ENTITIES[name](item)));
   }
 
   async save<T extends ModelEntity>(name: string, item: T) {

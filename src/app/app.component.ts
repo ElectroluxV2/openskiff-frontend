@@ -23,13 +23,13 @@ export class AppComponent {
       header: 'Short Name',
       hint: 'Max 64 chars.',
       placeholder: 'MKŻ Arka',
-      controlsConfig: ['', [Validators.required, Validators.maxLength(64)]]
+      controlsConfig: [Validators.required, Validators.maxLength(64)]
     }, {
       columnDef: 'fullName',
       header: 'Full Name',
       hint: 'Max 256 chars.',
       placeholder: 'Miejski Klub Żeglarski Arka Gdynia',
-      controlsConfig: ['', [Validators.required, Validators.maxLength(256)]]
+      controlsConfig: [Validators.required, Validators.maxLength(256)]
     }]), {
       add: true,
       delete: true,

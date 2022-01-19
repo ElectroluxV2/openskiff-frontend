@@ -5,10 +5,10 @@
   <p>Fill below</p>
 
   <form #form="ngForm" [formGroup]="modelEntityForm" (ngSubmit)="submit()">
-    <ng-container  *ngFor="let column of data.table.columns">
-      <mat-form-field appearance="standard" *ngIf="!(column.id && !data.sourceObject)">
+    <ng-container *ngFor="let column of data.table.columns">
+      <mat-form-field appearance="standard" *ngIf="!(column.id && !data.sourceObject)" [hidden]="column.id">
         <mat-label>{{column.header}}</mat-label>
-        <input [formControlName]="column.columnDef" matInput placeholder="{{column.placeholder}}" [value]="getValue(column.columnDef)" [required]="column.required"/>
+        <input [formControlName]="column.columnDef" matInput placeholder="{{column.placeholder}}" [required]="column.required"/>
         <mat-hint>{{column.hint}}</mat-hint>
       </mat-form-field>
     </ng-container>

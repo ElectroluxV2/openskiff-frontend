@@ -77,7 +77,6 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   }
 
   public async openDialog(sourceObject?: ModelEntity): Promise<void> {
-    console.log(sourceObject)
     const dialogRef = this.dialog.open(TableAddEditDialogComponent, {
       data: {
         table: this.sourceDatabaseTable,
@@ -104,7 +103,6 @@ export class TableViewComponent implements AfterViewInit, OnInit {
   }
 
   public async editSelected(): Promise<void> {
-
     for (const item of this.selection.selected) {
       await this.openDialog(item);
       this.selection.toggle(item);
