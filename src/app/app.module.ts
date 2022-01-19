@@ -4,14 +4,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from "@angular/material/tabs";
-import { ClubsComponent } from './components/clubs/clubs.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
 import { MatTableModule } from "@angular/material/table";
 import { HttpClientModule } from "@angular/common/http";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialogModule } from "@angular/material/dialog";
-import { ClubDialogComponent } from './components/clubs/club-dialog/club-dialog.component';
+import { ClubDialogComponent } from './components/table-view/club-dialog/club-dialog.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -20,15 +20,15 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { ClubErrorSnackBarComponent } from './components/clubs/club-error-snack-bar/club-error-snack-bar.component';
-import { ErrorDetailsDialogComponent } from './components/clubs/club-error-snack-bar/error-details-dialog/error-details-dialog.component';
+import { TableViewErrorSnackBarComponent } from './components/table-view/table-view-error-snack-bar/table-view-error-snack-bar.component';
+import { ErrorDetailsDialogComponent } from './components/table-view/table-view-error-snack-bar/error-details-dialog/error-details-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ClubsComponent,
+    TableViewComponent,
     ClubDialogComponent,
-    ClubErrorSnackBarComponent,
+    TableViewErrorSnackBarComponent,
     ErrorDetailsDialogComponent
   ],
   imports: [

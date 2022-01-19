@@ -5,11 +5,11 @@ import { ErrorDetailsDialogComponent } from "./error-details-dialog/error-detail
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-  selector: 'app-club-error-snack-bar',
-  templateUrl: './club-error-snack-bar.component.html',
-  styleUrls: ['./club-error-snack-bar.component.scss']
+  selector: 'app-table-view-error-snack-bar',
+  templateUrl: './table-view-error-snack-bar.component.html',
+  styleUrls: ['./table-view-error-snack-bar.component.scss']
 })
-export class ClubErrorSnackBarComponent {
+export class TableViewErrorSnackBarComponent {
 
   constructor(public dialog: MatDialog, private snackBarRef: MatSnackBarRef<SimpleSnackBar>, @Inject(MAT_SNACK_BAR_DATA) private data: { exception: HttpErrorResponse }) { }
 

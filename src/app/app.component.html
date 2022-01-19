@@ -1,5 +1,5 @@
 <div class="mat-typography app-frame mat-app-background">
   <mat-tab-group mat-align-tabs="start">
-    <mat-tab *ngFor="let table of tables" [label]="table.label"><app-clubs [columns]="table.columns" [name]="table.modelEntityName"></app-clubs></mat-tab>
+    <mat-tab *ngFor="let table of tables" [label]="table.label"><app-table-view [columns]="table.columns" [name]="table.modelEntityName"></app-table-view></mat-tab>
   </mat-tab-group>
 </div>

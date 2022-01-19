@@ -9,17 +9,17 @@ import { catchError, firstValueFrom, map, merge, startWith, switchMap, of as obs
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { ClubErrorSnackBarComponent } from "./club-error-snack-bar/club-error-snack-bar.component";
+import { TableViewErrorSnackBarComponent } from "./table-view-error-snack-bar/table-view-error-snack-bar.component";
 import { ModelEntityColumn } from "./model-entity-column.interface";
 
 @Component({
-  selector: 'app-clubs[columns][name]',
-  templateUrl: './clubs.component.html',
-  styleUrls: ['./clubs.component.scss']
+  selector: 'app-table-view[name][columns]',
+  templateUrl: './table-view.component.html',
+  styleUrls: ['./table-view.component.scss']
 })
-export class ClubsComponent implements AfterViewInit, OnInit {
-  @Input('columns') columns!: ModelEntityColumn<ModelEntity>[];
+export class TableViewComponent implements AfterViewInit, OnInit {
   @Input('name') modelEntityName!: string;
+  @Input('columns') columns!: ModelEntityColumn<ModelEntity>[];
 
   @ViewChild(MatTable) table!: MatTable<ModelEntity>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -122,7 +122,7 @@ export class ClubsComponent implements AfterViewInit, OnInit {
 
   private async handleError(exception: unknown): Promise<void> {
     console.log(exception)
-    this.snackBar.openFromComponent(ClubErrorSnackBarComponent, {
+    this.snackBar.openFromComponent(TableViewErrorSnackBarComponent, {
       horizontalPosition: 'end',
       verticalPosition: 'top',
       panelClass: ['mat-toolbar', 'mat-warn'],
