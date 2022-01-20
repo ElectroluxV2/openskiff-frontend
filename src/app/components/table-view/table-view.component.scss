@@ -36,8 +36,27 @@
   //  flex: none;
   //}
 
+  .mat-row, .mat-header-row {
+    gap: 1em;
+  }
+
   .mat-column-select {
     width: 35px;
     flex: none;
   }
+
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .column {
+      margin: 12px 0 0;
+    }
+
+    .value {
+      box-sizing: border-box;
+    }
+  }
+
 }

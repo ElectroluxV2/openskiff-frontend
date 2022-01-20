@@ -70,3 +70,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-snack-bar-container {
   max-width: 50vw !important;
 }
+
+.value >.mat-form-field-wrapper > .mat-form-field-flex > .mat-form-field-infix {
+  border-top: 0;
+}

@@ -24,8 +24,11 @@
     </ng-container>
 
     <ng-container *ngFor="let column of sourceDatabaseTable.columns" [matColumnDef]="column.columnDef">
-      <mat-header-cell mat-sort-header *matHeaderCellDef>
-        {{column.header}}
+      <mat-header-cell *matHeaderCellDef class="search-container">
+        <p class="column" mat-sort-header>{{column.header}}</p>
+        <mat-form-field class="value" >
+          <input matInput [ngModel]="probe[column.columnDef]" (ngModelChange)="onSearchChange(column.columnDef, $event)">
+        </mat-form-field>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         {{column.cell(row) }}

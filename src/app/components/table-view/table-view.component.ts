@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from "../../services/api.service";
-import { ModelEntity, Page } from "../../services/api.interface";
+import { ModelEntity, Page, Sort } from "../../services/api.interface";
 import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatDialog } from "@angular/material/dialog";
@@ -26,6 +26,11 @@ export class TableViewComponent implements AfterViewInit, OnInit {
 
   isLoadingResults = true;
   errorOccurred = false;
+
+  public probe: {
+    [key: string]: any
+  } = {};
+  private searchTimeout: number = 0;
 
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<ModelEntity>([]);
@@ -54,7 +59,11 @@ export class TableViewComponent implements AfterViewInit, OnInit {
         switchMap(() => {
           this.isLoadingResults = true;
           return this.apiService
-            .getAll(this.sourceDatabaseTable.modelEntityName, new Page(this.paginator, this.sort))
+            .getAll(this.sourceDatabaseTable.modelEntityName, {
+              page: new Page(this.paginator),
+              sort: new Sort(this.sort),
+              probe: this.probe as ModelEntity
+            })
             .pipe(catchError(() => observableOf(null)));
         }),
         map(data => {
@@ -69,7 +78,7 @@ export class TableViewComponent implements AfterViewInit, OnInit {
           // Only refresh the result length if there is new data. In case of rate
           // limit errors, we do not want to reset the paginator to zero, as that
           // would prevent users from re-triggering requests.
-          this.resultsLength = data.page.totalElements;
+          this.resultsLength = data.request.page.totalElements;
           return data.items;
         }),
       )
@@ -157,5 +166,22 @@ export class TableViewComponent implements AfterViewInit, OnInit {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.ids}`;
+  }
+
+  public onSearchChange(header: string, value: string) {
+
+    if (value === '') {
+      delete this.probe[header];
+    } else {
+      this.probe[header] = value;
+    }
+
+    this.searchTimeout && clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(this.doSearch.bind(this), 300);
+  }
+
+  private doSearch() {
+    console.log(this.probe)
+    this.paginator.page.emit();
   }
 }

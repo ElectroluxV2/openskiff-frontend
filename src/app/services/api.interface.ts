@@ -261,21 +261,33 @@ export class Page {
   totalElements: number;
   totalPages: number;
   number: number;
-  activeSort: string;
-  directionSort: string;
 
-  constructor(paginator: MatPaginator, sort: MatSort) {
+  constructor(paginator: MatPaginator) {
     this.size = paginator.pageSize;
     this.totalElements = 0;
     this.totalPages = 0;
     this.number = paginator.pageIndex;
+  }
+}
+
+export class Sort {
+  activeSort: string;
+  directionSort: string;
+
+  constructor(sort: MatSort) {
     this.activeSort = sort.active;
     this.directionSort = sort.direction;
   }
 }
 
-export interface PagedResponse<T> {
+export interface GetAllRequest<T> {
   page: Page;
+  sort: Sort;
+  probe: T;
+}
+
+export interface PagedResponse<T> {
+  request: GetAllRequest<T>;
   items: T[];
 }
 
